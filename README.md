@@ -22,3 +22,9 @@ Creates one unix domain socket file as defined
 $ ls -l /tmp/uwsgi.socket
 srwxr-xr-x jody jody 0 B Wed Oct 19 22:36:28 2022 /tmp/uwsgi.socket
 ```
+
+Build image
+```shell
+docker build . -t uswgi_image
+docker run --name uwsgi_container -p 80:80 --rm uswgi_image
+```
