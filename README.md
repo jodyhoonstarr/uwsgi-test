@@ -29,3 +29,5 @@ docker compose up
 # or force rebuild
 docker compose up --build --force-recreate --no-deps
 ```
+
+Should see `Hello World!` at [http://localhost:8080](http://localhost:8080)
