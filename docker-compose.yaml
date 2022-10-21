@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: nginx
+    ports:
+      - "8080:80"
+    networks:
+      - uwsgi-network
+
+  uwsgi:
+    build: uwsgi
+    environment:
+      UWSGI_HOST: ${UWSGI_HOST}
+      UWSGI_PORT: ${UWSGI_PORT}
+    expose:
+      - ${UWSGI_PORT}
+    networks:
+      - uwsgi-network
+    command: uwsgi --socket ${UWSGI_HOST}:${UWSGI_PORT} --wsgi-file hello.py --callable app --processes 4 --threads 2
+
+networks:
+  uwsgi-network:
+    driver: bridge

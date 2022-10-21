@@ -1,30 +1,31 @@
-# UWSGI Demo
+# UWSGI Test
 
+A test production configuration for uWSGI.
 
-Start in prod to see flask message
+## Overview
+
+1. uwsgi container running flask hello world app ([docs](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html#deploying-flask))
+    ```shell
+    uwsgi --socket ${UWSGI_HOST}:${UWSGI_PORT} --wsgi-file hello.py --callable app --processes 4 --threads 2
+    ```
+2. nginx container running as reverse proxy to uwsgi over ip:port ([docs](https://nginx.org/en/docs/http/ngx_http_uwsgi_module.html#uwsgi_pass))
+
+    ```text
+    location / {
+        include uwsgi_params;
+        # connect to {uwsgi_protocol}://{container internal ip}:{exposed port}
+        uwsgi_pass uwsgi://uwsgi:9000;
+        uwsgi_read_timeout 1h;
+        uwsgi_send_timeout 1h;
+        proxy_send_timeout 1h;
+        proxy_read_timeout 1h;
+    }
+    ```
+## Usage
+
 ```shell
-$ export FLASK_ENV=production
-$ FLASK_APP=hello.py flask run --port 5555
-```
-
-Start uWSGI using the ini file
-```shell
-$ uwsgi --ini uwsgi.ini
-```
-
-Spawns 1 master process and 5 workers, e.g. `htop --filter wsgi`
-```shell
-9190 jody ... uwsgi --ini uwsgi.ini
-```
-
-Creates one unix domain socket file as defined
-```shell
-$ ls -l /tmp/uwsgi.socket
-srwxr-xr-x jody jody 0 B Wed Oct 19 22:36:28 2022 /tmp/uwsgi.socket
-```
-
-Build image
-```shell
-docker build . -t uswgi_image
-docker run --name uwsgi_container -p 80:80 --rm uswgi_image
+# fire it up
+docker compose up
+# or force rebuild
+docker compose up --build --force-recreate --no-deps
 ```
