@@ -2,6 +2,10 @@
 
 A test production configuration for uWSGI.
 
+> ⚠️ ️Note
+> 
+> If the goal is to package an app for production where the host may be using some other webserver (read: IIS) bundle nginx in the uwsgi Dockerfile to encapsulate. Reverse proxy standard http traffic.
+
 ## Overview
 
 1. uwsgi container running flask hello world app ([docs](https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html#deploying-flask))
