@@ -8,6 +8,13 @@ services:
     networks:
       - uwsgi-network
 
+  iis:
+    build: iis
+    ports:
+      - "8081:80"
+    networks:
+      - uwsgi-network
+
   uwsgi:
     build: uwsgi
     environment:
